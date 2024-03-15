@@ -73,32 +73,15 @@ cd sd_dreambooth_extension
 echo "Checking out Dreambooth commit: ${DREAMBOOTH_TAG}"
 git checkout ${DREAMBOOTH_TAG}
 
-echo "Install CUDA"
-cd ${WORKSPACE}
-wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/cuda-keyring_1.0-1_all.deb
-sudo dpkg -i cuda-keyring_1.0-1_all.deb
-sudo apt-get update
-sudo apt-get -y install cuda
-rm cuda-keyring_1.0-1_all.deb
-
 echo "Check GPU"
 lspci | grep -i nvidia
 nvidia-smi
-
-echo "Installing Pytorch"
-pip3 install --no-cache-dir torch torchvision torchaudio
-
-echo "Installing xformers"
-pip3 install --no-cache-dir xformers
 
 echo "Installing dependencies for the AUTOMATIC1111 WebUI"
 cd ${WORKSPACE}/stable-diffusion-webui
 python3 -m venv --system-site-packages venv
 source venv/bin/activate
-pip3 install wheel
 pip3 install -r requirements.txt
-pip3 install torch torchvision torchaudio
-pip3 install xformers
 
 echo "Installing dependencies for the Dreambooth extension"
 cd ${WORKSPACE}/stable-diffusion-webui/extensions/sd_dreambooth_extension
@@ -113,5 +96,3 @@ cp ${WORKSPACE}/stable-diffusion-terraform/config/config.json ${WORKSPACE}/stabl
 cp ${WORKSPACE}/stable-diffusion-terraform/config/ui-config.json ${WORKSPACE}/stable-diffusion-webui/ui-config.json
 cp ${WORKSPACE}/stable-diffusion-terraform/config/webui-user.sh ${WORKSPACE}/stable-diffusion-webui/webui-user.sh
 
-# Reboot for the Nvidia GPU to be used
-sudo reboot
